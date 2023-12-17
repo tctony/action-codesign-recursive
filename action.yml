@@ -14,15 +14,17 @@ inputs:
     default: ''
 
 runs: |
+  IDENTITY=${{ inputs.identity }}
+  APP_PATH=${{ inputs.path }}
   # 签名嵌套的框架
-  find "${{ inputs.path }}" -name "*.framework" -print0 | while read -d $'\0' FRAMEWORK
+  find "$APP_PATH" -name "*.framework" -print0 | while read -d $'\0' FRAMEWORK
   do
-      codesign --force ${{ inputs.options }} --sign "${{ inputs.identity }}" "$FRAMEWORK"
+      codesign --force ${{ inputs.options }} --sign "$IDENTITY" "$FRAMEWORK"
   done
   # 签名嵌套的应用
-  find "${{ inputs.path }}" -name "*.app" -print0 | while read -d $'\0' NESTED_APP
+  find "$APP_PATH" -name "*.app" -print0 | while read -d $'\0' NESTED_APP
   do
-      codesign --force ${{ inputs.options }} --sign "${{ inputs.identity }}" "$NESTED_APP"
+      codesign --force ${{ inputs.options }} --sign "$IDENTITY" "$NESTED_APP"
   done
   # 签名主应用
-  codesign --force ${{ inputs.options }} --sign "${{ inputs.identity }}" "${{ inputs.path }}"
+  codesign --force ${{ inputs.options }} --sign "$IDENTITY" "$APP_PATH"
