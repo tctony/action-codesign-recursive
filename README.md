@@ -2,7 +2,7 @@
 do codesign on xcode app recursively
 
 Use it inside steps like this
-```
+```yml
 - name: Codesign
   uses: tctony/action-codesign-recursive@v1
   with:
