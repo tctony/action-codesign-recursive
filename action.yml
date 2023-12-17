@@ -1,0 +1,29 @@
+name: 'Codesign Xcode App Recursively'
+author: 'tctony'
+inputs:
+  identity:
+    description: 'Cosesign identify, must be installed in keychain before using this action'
+    required: true
+  path:
+    description: 'Path to app to be signed'
+    required: true
+  options:    
+    description: 'optional sign options. such as "--options runtime " for mac app'
+    required: false
+    default: ''
+
+runs: |
+  IDENTITY="${{ inputs.identity }}"
+  APP_PATH="${{ inputs.path }}"
+  # 签名嵌套的框架
+  find "$APP_PATH" -name "*.framework" -print0 | while read -d $'\0' FRAMEWORK
+  do
+      codesign --force ${{ inputs.options }} --sign "$IDENTITY" "$FRAMEWORK"
+  done
+  # 签名嵌套的应用
+  find "$APP_PATH" -name "*.app" -print0 | while read -d $'\0' NESTED_APP
+  do
+      codesign --force ${{ inputs.options }} --sign "$IDENTITY" "$NESTED_APP"
+  done
+  # 签名主应用
+  codesign --force ${{ inputs.options }} --sign "$IDENTITY" "$APP_PATH"
