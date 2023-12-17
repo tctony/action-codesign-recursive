@@ -1,4 +1,5 @@
 name: 'Codesign Xcode App Recursively'
+description: 'recursive codesign framework and nested apps inside app bundle'
 author: 'tctony'
 inputs:
   identity:
