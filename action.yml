@@ -18,8 +18,8 @@ runs:
   steps: 
     - name: Resursive Codesign
       run: | 
-        IDENTITY=${{ inputs.identity }}
-        APP_PATH=${{ inputs.path }}
+        IDENTITY="${{ inputs.identity }}"
+        APP_PATH="${{ inputs.path }}"
         # 签名嵌套的框架
         find "$APP_PATH" -name "*.framework" -print0 | while read -d $'\0' FRAMEWORK
         do
